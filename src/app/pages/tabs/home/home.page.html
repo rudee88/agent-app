@@ -1,0 +1,69 @@
+<ion-content [fullscreen]="true">
+  <div id="header" class="ion-margin-bottom">
+    <ion-icon id="menu-icon" name="grid-outline"></ion-icon>
+    <div id="location">
+      <ion-icon name="location"></ion-icon>
+      <h4 class="ion-no-margin">Ampang</h4>
+    </div>
+    <div id="avatar">
+      <ion-img src="../../../../assets/avatar.png"></ion-img>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <app-home-loading [isLoading]="isLoading"></app-home-loading>
+
+  <div *ngIf="isLoading">
+    <ion-skeleton-text
+      animated
+      style="height: 10rem; width: 100%"
+    ></ion-skeleton-text>
+  </div>
+
+  <div class="list-title" *ngIf="isLoading">
+    <h3 class="title"><ion-skeleton-text animated style="width: 30vw;"></ion-skeleton-text></h3>
+    <p><ion-skeleton-text animated style="width: 20vw;"></ion-skeleton-text></p>
+  </div>
+
+  <div class="product-list" *ngIf="isLoading">
+    <app-products-loading *ngFor="let item of dummy"></app-products-loading>
+  </div>
+  
+
+  <!-- BANNER -->
+  <div id="banner" *ngIf="!isLoading">
+    <ion-img
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJEjGHfHbRLKmPL9ukAx1E4bU-IYerVpGBF5lmr6di4RFJS1m2FY4OodNVuW-XKnVLv9Q&usqp=CAU"
+    ></ion-img>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="list-title" *ngIf="!isLoading">
+    <h3 class="title">Top Categories</h3>
+  </div>
+
+  <swiper-container
+    [initialSlide]="0"
+    [spaceBetween]="0"
+    [slidesPerView]="3.5"
+    [slidesOffsetBefore]="0"
+    [freeMode]="true"
+  >
+    <swiper-slide *ngFor="let item of categories">
+      <app-category-item [item]="item"></app-category-item>
+    </swiper-slide>
+  </swiper-container>
+
+  <!-- PRODUCTS -->
+  <div class="list-title" *ngIf="!isLoading">
+    <h3 class="title">Exclusive Offer</h3>
+    <a href="">See All</a>
+  </div>
+
+  <div class="product-list" *ngIf="!isLoading">
+    <app-product-card
+      *ngFor="let item of products"
+      [item]="item"
+    ></app-product-card>
+  </div>
+</ion-content>

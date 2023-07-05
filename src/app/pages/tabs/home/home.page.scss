@@ -1,0 +1,74 @@
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+
+    #menu-icon {
+        font-size: 1.7rem;
+        color: var(--ion-color-dark-tint);
+    }
+
+    #location {
+        display: flex;
+        align-items: center;
+
+        ion-icon {
+            color: var(--ion-color-primary);
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+    }
+
+    #avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #f4f4f4;
+        border-radius: 20%;
+        overflow: hidden;
+    }
+}
+
+ion-searchbar {
+    --box-shadow: none;
+    --background: #eef7f1;
+    --border-radius: 1rem;
+    --placeholder-font-weight: 600;
+    --placeholder-opacity: 0.3;
+
+    padding: 0;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+}
+
+#banner {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.list-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    .title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+        font-weight: 600;
+    }
+}
+
+.product-list {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
