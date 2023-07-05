@@ -50,7 +50,7 @@
     [freeMode]="true"
   >
     <swiper-slide *ngFor="let item of categories">
-      <app-category-item [item]="item"></app-category-item>
+      <app-category-item [item]="item" [routerLink]="['/', 'tabs', 'category', item.id]"></app-category-item>
     </swiper-slide>
   </swiper-container>
 

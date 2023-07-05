@@ -13,7 +13,7 @@ export class CategoryService {
       { id: 'c1', name: 'Minyak Angin', image: 'assets/categories/IMG_6385.JPG' },
       { id: 'c2', name: 'Jus Kesihatan', image: 'assets/categories/synergy-pluz.jpeg' },
       { id: 'c3', name: 'Minyak Lelaki', image: 'assets/categories/xxl-strongmen.jpeg' },
-      { id: 'c4', name: 'Minyak Angin', image: 'assets/categories/vdara-oil.jpeg' },
+      { id: 'c4', name: 'Minyak Perempuan', image: 'assets/categories/vdara-oil.jpeg' },
     ]
   }
 }
