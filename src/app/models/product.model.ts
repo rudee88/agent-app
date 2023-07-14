@@ -5,4 +5,5 @@ export interface Product {
     image: string;
     shortDesc: string;
     categoryId?: string;
+    quantity?: number;
 }

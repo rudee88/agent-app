@@ -1,13 +1,21 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>search</ion-title>
-  </ion-toolbar>
+  <ion-searchbar
+  animated="true"
+  debounce
+  #searchInput
+  (ionChange)="onSearchBar($event)"></ion-searchbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">search</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  <div class="product-list" *ngIf="isLoading">
+    <app-products-loading *ngFor="let item of dummy"></app-products-loading>
+  </div>
+
+  <app-empty-screen *ngIf="!isLoading && products.length === 0 || query.length === 0" [model]="model"></app-empty-screen>
+  
+  <div class="product-list" *ngIf="products.length > 0 && !isLoading">
+     <app-product-card *ngFor="let item of products" [item]="item"></app-product-card>
+  </div>
+ 
 </ion-content>

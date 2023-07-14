@@ -8,10 +8,15 @@
   </ion-card-header>
   <ion-card-content>
     <h2>RM{{ item.price }}</h2>
-    <ion-buttons>
-      <ion-button>
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <div *ngIf="!item?.quantity || item?.quantity <= 0">
+      <ion-text color="primary" (click)="onQuantityPlus()">
+        Add
+      </ion-text>
+    </div>
+    <div *ngIf="item?.quantity > 0">
+      <ion-icon name="remove-outline" color="success" (click)="onQuantityMinus()"></ion-icon>
+      <ion-text class="ion-text-center quantity" color="success">{{ item?.quantity }}</ion-text>
+      <ion-icon name="add-outline" color="success" (click)="onQuantityPlus()"></ion-icon>
+    </div>
   </ion-card-content>
 </ion-card>

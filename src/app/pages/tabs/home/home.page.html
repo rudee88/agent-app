@@ -62,8 +62,25 @@
 
   <div class="product-list" *ngIf="!isLoading">
     <app-product-card
-      *ngFor="let item of products"
+      *ngFor="let item of product; let i = index"
       [item]="item"
+      [index]="i"
+      (add)="onQuantityPlus($event)"
+      (minus)="onQuantityMinus($event)"
     ></app-product-card>
   </div>
 </ion-content>
+
+<ion-footer *ngIf="cartData.totalItem > 0">
+  <ion-toolbar color="primary">
+    <ion-label>
+      <h4>{{ cartData?.totalItem }} Item<span *ngIf="cartData.totalItem > 1">s</span> | RM{{ cartData?.totalPrice }}</h4>
+      <ion-text color="light">
+        <p>Extra charge may apply</p>
+      </ion-text>
+    </ion-label>
+    <ion-button slot="end" fill="clear" color="light" (click)="onViewCart()">
+      <ion-icon slot="icon-only" name="basket-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

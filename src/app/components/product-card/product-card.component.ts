@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { Product } from 'src/app/models/product.model';
 
@@ -10,9 +10,20 @@ import { Product } from 'src/app/models/product.model';
 export class ProductCardComponent  implements OnInit {
 
   @Input() item: Product;
+  @Input() index: any
+  @Output() add: EventEmitter<any> = new EventEmitter();
+  @Output() minus: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {}
+
+  onQuantityPlus() {
+    this.add.emit(this.index);
+  }
+
+  onQuantityMinus() {
+    this.minus.emit(this.index);
+  }
 
 }
