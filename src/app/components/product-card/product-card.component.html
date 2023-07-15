@@ -7,7 +7,7 @@
     <ion-card-title>{{ item.name }}</ion-card-title>
   </ion-card-header>
   <ion-card-content>
-    <h2>RM{{ item.price }}</h2>
+    <h2>RM{{ item.price | number: '0.2-2' }}</h2>
     <div *ngIf="!item?.quantity || item?.quantity <= 0">
       <ion-text color="primary" (click)="onQuantityPlus()">
         Add

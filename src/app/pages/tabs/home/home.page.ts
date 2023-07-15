@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
+import { CartData } from 'src/app/models/cart-data.model';
 
 import { Category } from 'src/app/models/category.model';
 import { Product } from 'src/app/models/product.model';
@@ -15,6 +17,7 @@ export class HomePage implements OnInit {
   categories!: Category[];
   product: Product[] = [];
   cartData: any = {};
+  storeCart: any = {};
   dummy = Array(10);
 
   constructor(
@@ -30,13 +33,35 @@ export class HomePage implements OnInit {
     }, 3000);
   }
 
-  getItems() {
+  getCart() {
+    return Preferences.get( {key: 'cart'} );
+  }
+
+  async getItems() {
     this.categories = this.categoriesService.getAll();
     this.product = this.productServices.getAll();
+    this.storeCart = {}
 
     this.product.forEach((item) => {
       item.quantity = 0;
     });
+
+    let cart: any = await this.getCart();
+    // console.log('storeCart: ', cart);
+    if (cart?.value) {
+      this.storeCart = JSON.parse(cart.value);
+      // console.log('cartValue:', this.storeCart);
+      if (this.product.length > 0) {
+        this.product.forEach((element: any) => {
+          const cartItem = this.storeCart.items.find((item: any) => item.id === element.id);
+          if (cartItem) {
+            element.quantity = cartItem.quantity;
+          }
+        });
+      }
+      this.cartData.totalItem = this.storeCart.totalItem;
+      this.cartData.totalPrice = this.storeCart.totalPrice;
+    }
   }
 
   calculate() {
@@ -44,7 +69,7 @@ export class HomePage implements OnInit {
     this.cartData.items = [];
     let item = this.product.filter((x) => x.quantity > 0);
     // console.log('Added item,', item);
-    this.cartData.item = item;
+    this.cartData.items = item;
     this.cartData.totalPrice = 0;
     this.cartData.totalItem = 0;
     item.forEach((element) => {
@@ -59,6 +84,18 @@ export class HomePage implements OnInit {
       this.cartData.totalPrice = 0;
     }
     // console.log('cart: ', this.cartData);
+  }
+
+  async saveToCart() {
+    try {
+      // console.log('cartData: ', this.cartData)
+      await Preferences.set({
+        key: 'cart',
+        value: JSON.stringify(this.cartData),
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   onQuantityPlus(index) {
@@ -84,7 +121,9 @@ export class HomePage implements OnInit {
     this.calculate();
   }
 
-  onViewCart() {
-    
+  async onViewCart() {
+    if (this.cartData.items && this.cartData.items.length > 0) {
+      await this.saveToCart();
+    }
   }
- }
+}

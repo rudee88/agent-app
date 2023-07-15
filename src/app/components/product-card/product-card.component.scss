@@ -5,14 +5,16 @@ ion-card {
   padding-top: 1.2rem;
 
   .image-container {
-    height: 20rem;
+    height: 15rem;
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   ion-img {
     width: 80%;
+    height: auto;
   }
 
   ion-card-title {
