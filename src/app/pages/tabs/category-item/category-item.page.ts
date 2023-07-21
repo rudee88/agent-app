@@ -21,6 +21,7 @@ export class CategoryItemPage implements OnInit {
   product: Product[] = [];
   cartData: any = {};
   products: any;
+  storeCart: any = {};
   dummy = Array(10);
   isLoading: boolean;
 
@@ -32,37 +33,51 @@ export class CategoryItemPage implements OnInit {
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.route.paramMap.subscribe((paramMap) => {
-      // console.log('paramMap', paramMap);
-
       if (!paramMap.has('id')) {
         this.navCtrl.back();
         return;
       }
 
       this.id = paramMap.get('id');
-      // console.log('id: ', this.id);
-      
       this.isLoading = true;
-
-      setTimeout(() => {
-        this.categories = this.categoryService.getAll();
-        this.allProducts = this.productService.getAll();
-        this.getItems();
-        this.product = this.products.map(item => ({ ...item, quantity: 0 }));
-
+      this.getItems().then(() => {
         this.isLoading = false;
-      }, 3000);
+      });
     });
   }
 
-  getItems() {
+  async getItems() {
     this.category = {};
+    this.categories = this.categoryService.getAll();
+    this.allProducts = this.productService.getAll();
+    this.storeCart = {};
+    let cart = await this.getCart();
+    console.log('stored cart: ', cart);
+    if (cart?.value) {
+      this.storeCart = JSON.parse(cart.value);
+      // console.log('parse value: ', this.storeCart);
+      if (this.product.length > 0) {
+        this.product.forEach((element: any) => {
+          const cartItem = this.storeCart.items.find((item: any) => item.id === element.id);
+          if (cartItem) {
+            element.quantity = cartItem.quantity;
+          }
+        });
+      }
+      this.cartData.totalItem = this.storeCart.totalItem;
+      this.cartData.totalPrice = this.storeCart.totalPrice;
+    }
     let category = this.categories.filter((x) => x.id === this.id);
     this.category = category[0];
     this.products = this.allProducts.filter((x) => x.categoryId === this.id);
-    console.log('Products:', this.products);
+    this.product = this.products.map((item) => ({ ...item, quantity: 0 }));
+    this.isLoading = false;
+  }
+
+  getCart() {
+    return Preferences.get({ key: 'cart' });
   }
 
   calculate() {
@@ -99,7 +114,18 @@ export class CategoryItemPage implements OnInit {
     }
   }
 
-  onQuantityPlus(index: number) {
+  async saveProductsToStorage() {
+    try {
+      await Preferences.set({
+        key: 'cart',
+        value: JSON.stringify(this.product),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async onQuantityPlus(index: number) {
     try {
       console.log(this.product[index]);
       if (!this.product[index] || this.product[index].quantity === 0) {
@@ -111,18 +137,22 @@ export class CategoryItemPage implements OnInit {
       console.log('Updated product:', this.product);
       this.calculate();
       this.changeDetectorRef.markForCheck();
+      await this.saveToCart();
+      await this.saveProductsToStorage();
     } catch (e) {
       console.log(e);
     }
   }
 
-  onQuantityMinus(index: number) {
+  async onQuantityMinus(index: number) {
     if (this.product[index].quantity !== 0) {
       this.product[index].quantity -= 1;
     } else {
       this.product[index].quantity = 0;
     }
     this.calculate();
+    await this.saveToCart();
+    await this.saveProductsToStorage();
   }
 
   async onViewCart() {

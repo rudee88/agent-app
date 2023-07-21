@@ -15,7 +15,7 @@
 
   <div class="product-list" *ngIf="!isLoading">
     <app-product-card
-      *ngFor="let item of products; let i = index"
+      *ngFor="let item of product; let i = index"
       [item]="item"
       [index]="i"
       (add)="onQuantityPlus($event)"

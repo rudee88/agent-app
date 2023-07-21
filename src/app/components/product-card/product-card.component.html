@@ -13,7 +13,6 @@
         Add
       </ion-text>
     </div>
-    <p>Quantity: {{ item?.quantity }}</p>
     <div *ngIf="item?.quantity > 0">
       <ion-icon name="remove-outline" color="success" (click)="onQuantityMinus()"></ion-icon>
       <ion-text class="ion-text-center quantity" color="success">{{ item?.quantity }}</ion-text>
