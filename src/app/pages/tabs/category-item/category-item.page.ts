@@ -51,6 +51,10 @@ export class CategoryItemPage implements OnInit {
     });
   }
 
+  ionViewWillEnter() {
+    this.getItems();
+  }
+
   async getItems() {
     this.category = {};
     this.categories = this.categoryService.getAll();
