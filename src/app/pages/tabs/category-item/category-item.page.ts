@@ -104,8 +104,8 @@ export class CategoryItemPage implements OnInit {
 
   getCartDataFromState() {
     const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state && state.storeCart) {
-      this.storeCart = state.storeCart; // Fix the typo here
+    if (state && state['storeCart']) { 
+      this.storeCart = state['storeCart']; 
       this.product.forEach((element: any) => {
         const cartItem = this.storeCart.items.find((item: any) => item.id === element.id);
         if (cartItem) {
