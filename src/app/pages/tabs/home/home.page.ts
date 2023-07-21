@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { NavController } from '@ionic/angular';
 
@@ -26,7 +27,7 @@ export class HomePage implements OnInit {
     private categoriesService: CategoryService,
     private productServices: ProductService,
     private productDataService: ProductDataService,
-    private navCtrl: NavController
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -86,9 +87,12 @@ export class HomePage implements OnInit {
   }
 
   viewCategory(categoryId: string) {
-    this.navCtrl.navigateForward(['/tabs/category-item', categoryId], {
-      state: { storeCart: this.storeCart } // Pass storeCart data as a parameter
-    });
+    const navigationExtras: NavigationExtras = {
+      state: {
+        storeCart: this.storeCart
+      }
+    };
+    this.router.navigate(['/tabs/category-item', categoryId], navigationExtras);
   }
 
   calculate() {

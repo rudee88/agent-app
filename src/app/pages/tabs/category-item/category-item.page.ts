@@ -43,8 +43,7 @@ export class CategoryItemPage implements OnInit {
         this.navCtrl.back();
         return;
       }
-
-      this.storeCart = this.navParams.get('storeCart');
+      this.getCartDataFromState();
       if (this.storeCart && this.storeCart.value) {
         this.storeCart = JSON.parse(this.storeCart.value);
         this.product.forEach((element: any) => {
