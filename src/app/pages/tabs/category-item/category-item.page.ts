@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { NavController } from '@ionic/angular';
 
@@ -32,7 +32,8 @@ export class CategoryItemPage implements OnInit {
     private navCtrl: NavController,
     private productService: ProductService,
     private changeDetectorRef: ChangeDetectorRef,
-    private productDataService: ProductDataService
+    private productDataService: ProductDataService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -85,6 +86,21 @@ export class CategoryItemPage implements OnInit {
 
   getCart() {
     return Preferences.get({ key: 'cart' });
+  }
+
+  getCartDataFromState() {
+    const state = this.router.getCurrentNavigation()?.extras.state;
+    if (state && state.storeCart) {
+      this.storeCart = state.storeCartl
+      this.product.forEach((element: any) => {
+        const cartItem = this.storeCart.items.find((item: any) => item.id === element.id);
+        if (cartItem) {
+          element.quantity = cartItem.quantity;
+        }
+      });
+      this.cartData.totalItem = this.storeCart.totalItem;
+      this.cartData.totalPrice = this.storeCart.totalPrice;
+    }
   }
 
   calculate() {
