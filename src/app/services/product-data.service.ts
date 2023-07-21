@@ -9,5 +9,11 @@ export class ProductDataService {
 
   constructor() { }
 
-  
+  setProducts(products: Product[]) {
+    this.products = products;
+  }
+
+  getProducts() {
+    return this.products;
+  }
 }
