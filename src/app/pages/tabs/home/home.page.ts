@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
+import { NavController } from '@ionic/angular';
 
 import { Category } from 'src/app/models/category.model';
 import { Product } from 'src/app/models/product.model';
@@ -24,7 +25,8 @@ export class HomePage implements OnInit {
   constructor(
     private categoriesService: CategoryService,
     private productServices: ProductService,
-    private productDataService: ProductDataService
+    private productDataService: ProductDataService,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -81,6 +83,12 @@ export class HomePage implements OnInit {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  viewCategory(categoryId: string) {
+    this.navCtrl.navigateForward(['/tabs/category-item', categoryId], {
+      state: { storeCart: this.storeCart } // Pass storeCart data as a parameter
+    });
   }
 
   calculate() {
