@@ -10,13 +10,17 @@ import { Product } from 'src/app/models/product.model';
 export class ProductCardComponent  implements OnInit {
 
   @Input() item: Product;
-  @Input() index: any
+  @Input() index: number;
   @Output() add: EventEmitter<any> = new EventEmitter();
   @Output() minus: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {}
+
+  ngOnChanges() {
+    console.log('Received Item:', this.item); // Check the received item
+  }
 
   onQuantityPlus() {
     this.add.emit(this.index);
