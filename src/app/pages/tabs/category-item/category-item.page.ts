@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { NavController } from '@ionic/angular';
+import { NavController, NavParams } from '@ionic/angular';
 
 import { Category } from 'src/app/models/category.model';
 import { Product } from 'src/app/models/product.model';
@@ -33,15 +33,29 @@ export class CategoryItemPage implements OnInit {
     private productService: ProductService,
     private changeDetectorRef: ChangeDetectorRef,
     private productDataService: ProductDataService,
-    private router: Router
+    private router: Router,
+    private navParams: NavParams
   ) {}
 
   async ngOnInit() {
     this.products = this.productDataService.getProducts();
-    this.route.paramMap.subscribe((paramMap) => {
+    this.route.paramMap.subscribe(async (paramMap) => {
       if (!paramMap.has('id')) {
         this.navCtrl.back();
         return;
+      }
+
+      this.storeCart = this.navParams.get('storeCart');
+      if (this.storeCart && this.storeCart.value) {
+        this.storeCart = JSON.parse(this.storeCart.value);
+        this.product.forEach((element: any) => {
+          const cartItem = this.storeCart.items.find((item: any) => item.id === element.id);
+          if (cartItem) {
+            element.quantity = cartItem.quantyty;
+          }
+        });
+        this.cartData.totalItem = this.storeCart.totalItem;
+        this.cartData.totalPrice = this.storeCart.totalPrice;
       }
 
       this.id = paramMap.get('id');
