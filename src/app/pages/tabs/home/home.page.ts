@@ -32,6 +32,7 @@ export class HomePage implements OnInit {
     this.isLoading = true;
     setTimeout(() => {
       this.getItems();
+      this.fetchCartData();
       this.isLoading = false;
     }, 3000);
   }
@@ -48,7 +49,10 @@ export class HomePage implements OnInit {
     this.product.forEach((item) => {
       item.quantity = 0;
     });
+  
+  }
 
+  async fetchCartData() {
     let cart: any = await this.getCart();
     // console.log('storeCart: ', cart);
     if (cart?.value) {
