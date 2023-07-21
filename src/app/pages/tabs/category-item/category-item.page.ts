@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import { Category } from 'src/app/models/category.model';
 import { Product } from 'src/app/models/product.model';
 import { CategoryService } from 'src/app/services/category.service';
+import { ProductDataService } from 'src/app/services/product-data.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -19,8 +20,8 @@ export class CategoryItemPage implements OnInit {
   categories: Category[];
   allProducts: Product[];
   product: Product[] = [];
+  products: Product[] = [];
   cartData: any = {};
-  products: any;
   storeCart: any = {};
   dummy = Array(10);
   isLoading: boolean;
@@ -30,10 +31,12 @@ export class CategoryItemPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private productService: ProductService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private productDataService: ProductDataService
   ) {}
 
   async ngOnInit() {
+    this.products = this.productDataService.getProducts();
     this.route.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('id')) {
         this.navCtrl.back();
@@ -120,6 +123,7 @@ export class CategoryItemPage implements OnInit {
         key: 'cart',
         value: JSON.stringify(this.product),
       });
+      this.productDataService.setProducts(this.products);
     } catch (e) {
       console.log(e);
     }
@@ -137,7 +141,6 @@ export class CategoryItemPage implements OnInit {
       console.log('Updated product:', this.product);
       this.calculate();
       this.changeDetectorRef.markForCheck();
-      await this.saveToCart();
       await this.saveProductsToStorage();
     } catch (e) {
       console.log(e);

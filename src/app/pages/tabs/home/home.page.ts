@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { CartData } from 'src/app/models/cart-data.model';
 
 import { Category } from 'src/app/models/category.model';
 import { Product } from 'src/app/models/product.model';
 import { CategoryService } from 'src/app/services/category.service';
+import { ProductDataService } from 'src/app/services/product-data.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -16,16 +16,19 @@ export class HomePage implements OnInit {
   isLoading: boolean = false;
   categories!: Category[];
   product: Product[] = [];
+  products: Product[] = [];
   cartData: any = {};
   storeCart: any = {};
   dummy = Array(10);
 
   constructor(
     private categoriesService: CategoryService,
-    private productServices: ProductService
+    private productServices: ProductService,
+    private productDataService: ProductDataService
   ) {}
 
   ngOnInit() {
+    this.products = this.productDataService.getProducts();
     this.isLoading = true;
     setTimeout(() => {
       this.getItems();
@@ -64,6 +67,18 @@ export class HomePage implements OnInit {
     }
   }
 
+  async saveProductsToStorage() {
+    try {
+      await Preferences.set({
+        key: 'cart',
+        value: JSON.stringify(this.product),
+      });
+      this.productDataService.setProducts(this.products);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   calculate() {
     // console.log(this.product);
     this.cartData.items = [];
@@ -98,7 +113,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  onQuantityPlus(index) {
+  async onQuantityPlus(index) {
     try {
       // console.log(this.product[index]);
       if (!this.product[index] || this.product[index].quantity === 0) {
@@ -107,18 +122,20 @@ export class HomePage implements OnInit {
         this.product[index].quantity += 1;
       }
       this.calculate();
+      await this.saveProductsToStorage();
     } catch (e) {
       console.log(e);
     }
   }
 
-  onQuantityMinus(index) {
+  async onQuantityMinus(index) {
     if (this.product[index].quantity !== 0) {
       this.product[index].quantity -= 1;
     } else {
       this.product[index].quantity = 0;
     }
     this.calculate();
+    await this.saveProductsToStorage();
   }
 
   async onViewCart() {
